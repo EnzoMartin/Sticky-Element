@@ -85,7 +85,3 @@
     });
 
 }(jQuery, window));
-
-$(function(){
-    $('.sidebar').sticky($('.container'));
-});
