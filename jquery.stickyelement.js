@@ -38,6 +38,8 @@
 		var winOffset = window.pageYOffset;
 		if(winOffset >= this.yLimitTop && winOffset <= this.yLimitBtm){
 			this.UpdateOffset(winOffset - this.yLimitTop);
+		} else if (winOffset < this.yLimitTop){
+			this.UpdateOffset(0);
 		}
 	};
 	
@@ -49,7 +51,7 @@
 	};
 	
 	/**
-     * Update Stickied Elements' offset
+     * Update Stickied Element's offset
      * @param yOffset
      */
 	Sticky.prototype.UpdateOffset = function(yOffset){
@@ -77,7 +79,11 @@
 		this.each(function() {
 			var self = $(this);
 			var parent = par;
-			parent = (self.closest(parent))? self.closest(parent) : $(document);
+			if(parent){
+				parent = self.closest(parent);
+			} else {
+				throw new Error('No parent container specified');
+			}
 			var instance = self.data("stickyInstance");
 			
 			if (instance && options) {
