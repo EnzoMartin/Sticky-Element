@@ -1,16 +1,16 @@
 ;(function($, window, undefined) {
 
 	"use strict";
-	
+
 	/**
 	 * Sticky Element constructor
-	 * @param ele
+	 * @param elm
 	 * @param par
 	 * @param options
 	 * @constructor
 	 */
-	var Sticky = function(ele, par, options) {
-		this.ele = ele;
+	var Sticky = function(elm, par, options) {
+		this.elm = elm;
 		this.par = par;
 		this._frozen = false;
 		this.options = $.extend({
@@ -19,78 +19,76 @@
 		}, options);
 		this.init();
 	};
-	
+
 	Sticky.prototype.init = function() {
-		this.SetBoundaries();
-		this.ele.css({'position':'relative'});
-		this.par.css({'position':'relative'});
-		this.MoveIt();
+		this.setBoundaries();
+		this.elm.css({'position': 'relative'});
+		this.par.css({'position': 'relative'});
+		this.moveIt();
 	};
-	
-	Sticky.prototype.Update = function(){
+
+	Sticky.prototype.update = function() {
 		//This will handle any resizing of the container the sticky scroll is in and update the boundaries if necessary
-		this.SetBoundaries();
-		this.MoveIt();
+		this.setBoundaries();
+		this.moveIt();
 	};
-	
-	Sticky.prototype.MoveIt = function(){
+
+	Sticky.prototype.moveIt = function() {
 		// This will decide whether to move the stickied item
 		var winOffset = window.pageYOffset;
-		if(winOffset >= this.yLimitTop && winOffset <= this.yLimitBtm){
-			this.UpdateOffset(winOffset - this.yLimitTop);
-		} else if (winOffset < this.yLimitTop){
-			this.UpdateOffset(0);
+		if (winOffset >= this.yLimitTop && winOffset <= this.yLimitBtm) {
+			this.updateOffset(winOffset - this.yLimitTop);
+		} else if (winOffset < this.yLimitTop) {
+			this.updateOffset(0);
 		}
 	};
-	
-	Sticky.prototype.SetBoundaries = function(){
+
+	Sticky.prototype.setBoundaries = function() {
 		// This will set the boundaries the stickied item can move between and it's left position
-		this.xPos = this.ele.offset().left;
+		this.xPos = this.elm.offset().left;
 		this.yLimitTop = this.par.offset().top;
-		this.yLimitBtm = this.yLimitTop + this.par.height() - this.ele.outerHeight();
+		this.yLimitBtm = this.yLimitTop + this.par.height() - this.elm.outerHeight();
 	};
-	
+
 	/**
-     * Update Stickied Element's offset
-     * @param yOffset
-     */
-	Sticky.prototype.UpdateOffset = function(yOffset){
+	 * Update Stickied Element's offset
+	 * @param yOffset
+	 */
+	Sticky.prototype.updateOffset = function(yOffset) {
 		// This moves the item
-		if(this.animate){
-			this.ele.stop().animate({'top':yOffset},this.animTime);
+		if (this.animate) {
+			this.elm.stop().animate({'top': yOffset}, this.animTime);
 		} else {
-			this.ele.css({'top':yOffset});
+			this.elm.css({'top': yOffset});
 		}
 	};
-	
-	Sticky.prototype.ToggleFreeze = function(){
+
+	Sticky.prototype.toggleFreeze = function() {
 		// This will freeze the stickied item in place wherever it is
 		this._frozen = !this._frozen;
 	};
-	
-	$.stickies = [];
 
-	$.fn.sticky = function(par,options) {
+	$.fn.sticky = function(par, options) {
 		var method, args, ret = false;
 		if (typeof options === "string") {
 			args = [].slice.call(arguments, 0);
 		}
-		
+
 		this.each(function() {
 			var self = $(this);
 			var parent = par;
-			if(parent){
+			if (parent) {
 				parent = self.closest(parent);
 			} else {
 				throw new Error('No parent container specified');
 			}
 			var instance = self.data("stickyInstance");
-			
+
 			if (instance && options) {
 				if (typeof options === "object") {
 					ret = $.extend(instance.options, options);
 				} else if (options === "options") {
-					ret =  instance.options;
+					ret = instance.options;
 				} else if (typeof instance[options] === "function") {
 					ret = instance[options].apply(instance, args.slice(1));
 				} else {
@@ -99,25 +97,34 @@
 			} else {
 				instance = new Sticky(self, parent, options || {});
 				self.data("stickyInstance", instance);
-				$.stickies.push(instance);
+				$.fn.sticky._instances.push(instance);
 			}
 		});
 		return ret || this;
 	};
-	
-	// Update the position/offset changed on resize and move
-	$(window).on('resize',function(){
-		$.each($.stickies, function(){
-			this.Update();
-		});
+
+	$.fn.sticky._instances = [];
+
+	$(window).on({
+		'resize': function() {
+		// Update the position/offset changed on resize and move
+			$.each($.fn.sticky._instances, function() {
+				this.update();
+			});
+		},
+		'scroll': function() {
+			// Move all those suckers on scroll
+			$.each($.fn.sticky._instances, function() {
+				if (!this._frozen) {
+					this.moveIt();
+				}
+			});
+		}
 	});
-	
-	// Move all those suckers on scroll
-	$(window).on('scroll', function(){
-		$.each($.stickies, function(){
-			if(!this._frozen){
-				this.MoveIt();
-			}
-		});
+
+	// Deathstar death beam
+	$(document).on("pageshow pageleave", function (e) {
+		$(window).unbind('scroll resize');
+		$.fn.sticky._instances = [];
 	});
 }(jQuery, window));
