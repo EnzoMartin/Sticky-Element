@@ -47,7 +47,13 @@
 		// This will set the boundaries the stickied item can move between and it's left position
 		this.xPos = this.elm.offset().left;
 		this.yLimitTop = this.par.offset().top;
-		this.yLimitBtm = this.yLimitTop + this.par.height() - this.elm.outerHeight();
+		var parHeight = this.par.height();
+		var offsetDiff = (this.elm.offset().top - this.elm.css('marginTop').replace('px','')) - this.yLimitTop;
+		if(offsetDiff === 0){
+			this.yLimitBtm = this.yLimitTop + parHeight - this.elm.outerHeight();
+		} else {
+			this.yLimitBtm = this.yLimitTop + parHeight - (this.elm.outerHeight() + offsetDiff);
+		}
 	};
 
 	/**
@@ -78,9 +84,9 @@
 			var self = $(this);
 			var parent = par;
 			if (parent) {
-				parent = self.closest(parent);
+				parent = self.parent().closest(parent);
 			} else {
-				throw new Error('No parent container specified');
+				parent = self.parent();
 			}
 			var instance = self.data("stickyInstance");
 
@@ -123,7 +129,7 @@
 	});
 
 	// Deathstar death beam
-	$(document).on("pageshow pageleave", function (e) {
+	$(document).on("pageleave", function () {
 		$(window).unbind('scroll resize');
 		$.fn.sticky._instances = [];
 	});
