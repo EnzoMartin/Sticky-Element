@@ -15,6 +15,7 @@
         this._frozen = false;
         this.options = $.extend({
             animate: false,
+            useFixed: true,
             animTime: 300
         }, options);
         this.init();
@@ -37,13 +38,20 @@
         var height = this.element.outerHeight(true);
         var realStop = this._stop - height;
 
-        if (this._parentHeight - this._offset > height) {
+        if (this._parentHeight - this._offset > height && !this._frozen) {
             if (scrollTop >= this._start && scrollTop <= realStop) {
-                this.updateOffset(scrollTop - this._start);
-            } else if (scrollTop < this._start) {
-                this.updateOffset(0);
-            } else if (scrollTop > realStop) {
-                this.updateOffset(this._parentHeight - height - this._offset);
+                if(this.options.useFixed){
+                    this.element.css({'position':'fixed','top':0,'left':this.element.offset().left});
+                } else {
+                    this.updateOffset(scrollTop - this._start);
+                }
+            } else {
+                this.element.css({'position':'relative','left':0});
+                if (scrollTop < this._start) {
+                    this.updateOffset(0);
+                } else if (scrollTop > realStop) {
+                    this.updateOffset(this._parentHeight - height - this._offset);
+                }
             }
         }
     };
@@ -93,6 +101,8 @@
             } else {
                 parent = self.parent();
             }
+            parent.css({'position':'relative'}); // Set parent position to relative
+            self.css({'position':'relative'}); // Set item position to relative
             var instance = self.data("stickyInstance");
 
             if (instance && options) {
@@ -131,11 +141,5 @@
                 }
             });
         }
-    });
-
-    // Deathstar death beam
-    $(document).on("pageleave", function () {
-        $(window).unbind('scroll resize');
-        $.fn.sticky._instances = [];
     });
 }(jQuery, window));
