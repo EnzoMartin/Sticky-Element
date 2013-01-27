@@ -1,0 +1,36 @@
+{
+	"name": "stickyelement",
+	"title": "Sticky Element",
+	"description": "Allows sticking/pinning elements to the page as you scroll within set boundaries of a container",
+	"keywords": [
+		"sticky",
+		"pin",
+		"element",
+		"scroll"
+	],
+	"version": "0.0.2",
+	"author": {
+		"name": "Enzo Martin",
+		"email": "enzo.r.martin@gmail.com",
+		"url": "https://github.com/EnzoMartin78"
+	},
+	"maintainers": [
+		{
+			"name": "Enzo Martin",
+			"email": "enzo.r.martin@gmail.com",
+			"url": "https://github.com/EnzoMartin78"
+		}
+	],
+	"licenses": [
+		{
+			"type": "MIT",
+			"url": "https://github.com/EnzoMartin78/Sticky-Element/blob/master/README.md"
+		}
+	],
+	"bugs": "https://github.com/EnzoMartin78/Sticky-Element/issues",
+	"homepage": "https://github.com/EnzoMartin78/Sticky-Element",
+	"docs": "https://github.com/EnzoMartin78/Sticky-Element/blob/master/README.md",
+	"dependencies": {
+		"jquery": ">=1.7"
+	}
+}
