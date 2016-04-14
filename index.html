@@ -13,15 +13,15 @@
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
     <script type="text/javascript">
-        $(function(){
+        jQuery(function(){
             // Initialize the sticky scrolling on an item
-            $('header').sticky('.wrapper');
+            jQuery('#sticky').sticky('.wrapper');
         });
     </script>
   </head>
   <body>
     <div class="wrapper">
-      <header>
+      <header id="sticky">
         <h1>Sticky-element</h1>
         <p>Barebones jQuery plugin to make an element scroll with the page inside the boundaries of a specified container or the window</p>
 
@@ -196,6 +196,7 @@
       </footer>
     </div>
     <script src="javascripts/scale.fix.js"></script>
+  <script src="javascripts/jquery.stickyelement.min.js"></script>
     
   </body>
 </html>
