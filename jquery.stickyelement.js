@@ -10,7 +10,7 @@
     })();
 
     // Check if the browser supports the transition CSS property
-    var style = win.document.body.style;
+    var style = (win.document.body || win.document.documentElement).style;
     var prop = 'transition';
     var supportsTransition = typeof style[prop] == 'string';
 
