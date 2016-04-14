@@ -9,6 +9,11 @@
         return function(fn){ return raf(fn); };
     })();
 
+    // Check if the browser supports the transition CSS property
+    var style = win.document.body.style;
+    var prop = 'transition';
+    var supportsTransition = typeof style[prop] == 'string';
+
     var events = {
         created:'sticky-created',
         update:'sticky-update',
@@ -31,7 +36,7 @@
         this._frozen = false;
         this._stopped = true;
         this.options = $.extend({
-            useTransition:false,
+            useTransition:true,
             animate:true,
             animTime:200,
             animDelay:300
@@ -42,7 +47,7 @@
 
     Sticky.prototype.init = function(){
         var transition = '';
-        if(this.options.useTransition){
+        if(this.options.useTransition && supportsTransition){
             transition = 'top ' + this.options.animTime + 'ms ease-in-out';
             this.options.animate = false;
         }
