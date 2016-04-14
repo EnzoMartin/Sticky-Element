@@ -1,0 +1,33 @@
+{
+  "name": "jquery-sticky-element",
+  "description": "Simple and lightweight plugin to pin/sticky elements inside a container so they move as the user scrolls",
+  "version": "1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:EnzoMartin/Sticky-Element.git"
+  },
+  "license": "MIT",
+  "author": "Enzo Martin <enzo.r.martin@gmail.com>",
+  "contributors": [
+    {
+      "name": "Enzo Martin",
+      "email": "enzo.r.martin@gmail.com"
+    }
+  ],
+  "files": [
+    "jquery.stickyelement.js",
+    "jquery.stickyelement.min.js"
+  ],
+  "keywords": [
+    "dom",
+    "sticky",
+    "pin",
+    "element",
+    "scroll",
+    "jquery-plugin",
+    "ecosystem:jquery"
+  ],
+  "dependencies": {
+    "jquery": ">=1.7.0"
+  }
+}
