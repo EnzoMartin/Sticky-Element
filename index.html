@@ -1,0 +1,194 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Sticky-element by EnzoMartin</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-light.css">
+    <meta name="viewport" content="width=device-width">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Sticky-element</h1>
+        <p>Barebones jQuery plugin to make an element scroll with the page inside the boundaries of a specified container or the window</p>
+
+        <p class="view"><a href="https://github.com/EnzoMartin/Sticky-Element">View the Project on GitHub <small>EnzoMartin/Sticky-Element</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/EnzoMartin/Sticky-Element/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/EnzoMartin/Sticky-Element/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/EnzoMartin/Sticky-Element">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a id="sticking-an-element-when-scrolling" class="anchor" href="#sticking-an-element-when-scrolling" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Sticking an Element when Scrolling</h1>
+
+<p>This is a jQuery plugin to make an element scroll with the page inside the boundaries of a specified container.</p>
+
+<p>There are many plugins like this, but this one was built to be simple and lightweight, with no frills nor extra features.</p>
+
+<h3>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Usage:</h3>
+
+<ul>
+<li>Download from <a href="https://github.com/EnzoMartin/Sticky-Element/releases/latest">GitHub</a>, or <code>npm install jquery-sticky-element</code> if you're using <a href="https://www.npmjs.com/">NPM</a>
+</li>
+<li>Include jQuery &amp; Sticky Element</li>
+<li>Invoke Sticky Element on the desired DOM element(s)</li>
+</ul>
+
+<div class="highlight highlight-text-html-basic"><pre>&lt;<span class="pl-ent">script</span> <span class="pl-e">type</span>=<span class="pl-s"><span class="pl-pds">"</span>text/javascript<span class="pl-pds">"</span></span> <span class="pl-e">src</span>=<span class="pl-s"><span class="pl-pds">"</span>jquery.min.js<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt;
+&lt;<span class="pl-ent">script</span> <span class="pl-e">type</span>=<span class="pl-s"><span class="pl-pds">"</span>text/javascript<span class="pl-pds">"</span></span> <span class="pl-e">src</span>=<span class="pl-s"><span class="pl-pds">"</span>jquery.stickyelement.min.js<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt;
+<span class="pl-s1">&lt;<span class="pl-ent">script</span> <span class="pl-e">type</span>=<span class="pl-s"><span class="pl-pds">"</span>text/javascript<span class="pl-pds">"</span></span>&gt;</span>
+<span class="pl-s1">    <span class="pl-en">$</span>(<span class="pl-c1">document</span>).<span class="pl-en">ready</span>(<span class="pl-k">function</span>(){</span>
+<span class="pl-s1">        <span class="pl-en">$</span>(<span class="pl-s"><span class="pl-pds">'</span>scrolling_item_selector<span class="pl-pds">'</span></span>).<span class="pl-en">sticky</span>(<span class="pl-s"><span class="pl-pds">'</span>scrolling_container_selector<span class="pl-pds">'</span></span>);</span>
+<span class="pl-s1">    });</span>
+<span class="pl-s1">&lt;/<span class="pl-ent">script</span>&gt;</span></pre></div>
+
+<p>You can pass in a class or ID into either one. Note that the container will get set to position relative.</p>
+
+<h3>
+<a id="options" class="anchor" href="#options" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Options:</h3>
+
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>useTransition</td>
+<td>true</td>
+<td>Use native CSS3 <code>transition</code> property (recommended)</td>
+</tr>
+<tr>
+<td>animate</td>
+<td>false</td>
+<td>Use jQuery animate function</td>
+</tr>
+<tr>
+<td>animTime</td>
+<td>300</td>
+<td>Time it takes for animation to complete in <code>ms</code>
+</td>
+</tr>
+<tr>
+<td>animDelay</td>
+<td>300</td>
+<td>Delay until the animation starts in <code>ms</code>, used only if <code>animate</code> is <code>true</code>
+</td>
+</tr>
+</tbody>
+</table>
+
+<p><strong>Note</strong>: If you set <code>useTransition</code> to <code>true</code>, <code>animate</code> will always be treated as <code>false</code></p>
+
+<h3>
+<a id="methods" class="anchor" href="#methods" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Methods:</h3>
+
+<p>You can call various methods on a sticky element instance</p>
+
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>update</code></td>
+<td>Updates the position and boundaries of the element</td>
+</tr>
+<tr>
+<td><code>toggleFreeze</code></td>
+<td>Toggles whether the element will move based off the scroll position</td>
+</tr>
+<tr>
+<td><code>setBoundaries</code></td>
+<td>Updates the top and bottom boundaries of the element</td>
+</tr>
+<tr>
+<td><code>moveIt</code></td>
+<td>Manually move the element to the scroll position within its parent boundaries (useful if the element is frozen)</td>
+</tr>
+</tbody>
+</table>
+
+<h4>
+<a id="example-usage" class="anchor" href="#example-usage" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Example usage:</h4>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-c">// This will freeze/unfreeze the sticky element</span>
+<span class="pl-en">$</span>(<span class="pl-s"><span class="pl-pds">'</span>#sticky<span class="pl-pds">'</span></span>).<span class="pl-en">sticky</span>(<span class="pl-s"><span class="pl-pds">'</span>toggleFreeze<span class="pl-pds">'</span></span>);</pre></div>
+
+<h3>
+<a id="events" class="anchor" href="#events" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Events</h3>
+
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sticky-created</code></td>
+<td>Fired when the sticky element is created and ready to move</td>
+</tr>
+<tr>
+<td><code>sticky-update</code></td>
+<td>Fired when the element's update method is called to update boundaries</td>
+</tr>
+<tr>
+<td><code>sticky-hit-top</code></td>
+<td>Fired when the element reaches the top of it's container</td>
+</tr>
+<tr>
+<td><code>sticky-hit-bottom</code></td>
+<td>Fired when the element reaches the bottom of it's container</td>
+</tr>
+<tr>
+<td><code>sticky-frozen</code></td>
+<td>Fired when the element is frozen</td>
+</tr>
+<tr>
+<td><code>sticky-unfrozen</code></td>
+<td>Fired when the element is unfrozen</td>
+</tr>
+</tbody>
+</table>
+
+<h2>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>License</h2>
+
+<p>Copyright (c) 2010-2016</p>
+
+<p>The MIT License</p>
+
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/EnzoMartin">EnzoMartin</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
