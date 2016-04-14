@@ -9,6 +9,15 @@
         return function(fn){ return raf(fn); };
     })();
 
+    var events = {
+        created: 'sticky-created',
+        update: 'sticky-update',
+        top: 'sticky-hit-top',
+        bottom: 'sticky-hit-bottom',
+        frozen: 'sticky-frozen',
+        unfrozen: 'sticky-unfrozen'
+    };
+
     /**
      * Sticky Element constructor
      * @param elm {String}
@@ -20,6 +29,7 @@
         this.element = elm;
         this.parent = par;
         this._frozen = false;
+        this._stopped = true;
         this.options = $.extend({
             useTransition: false,
             animate: true,
@@ -45,6 +55,7 @@
                 'position':'relative'
             });
 
+        this.element.trigger(events.created);
         this.update();
     };
 
@@ -54,6 +65,7 @@
     Sticky.prototype.update = function() {
         this.setBoundaries(0);
         this.moveIt();
+        this.element.trigger(events.update);
     };
 
     /**
@@ -66,12 +78,25 @@
 
         if (this._parentHeight - this._offset > height && !this._frozen) {
             if (scrollTop >= this._start && scrollTop <= realStop) {
+                // Element is between top and bottom
                 this.updateOffset(scrollTop - this._start);
+                this._stopped = false;
             } else {
                 if (scrollTop < this._start) {
+                    // Element is at top
                     this.updateOffset(0);
+                    
+                    if(!this._stopped){
+                        this.element.trigger(events.top);
+                    }
+                    this._stopped = true;
                 } else if (scrollTop > realStop) {
+                    // Element is at bottom
                     this.updateOffset(this._parentHeight - height - this._offset);
+                    if(!this._stopped){
+                        this.element.trigger(events.bottom);
+                    }
+                    this._stopped = true;
                 }
             }
         }
@@ -113,7 +138,10 @@
         this._frozen = !this._frozen;
         this.element.stop(true, false);
         if(!this._frozen){
+            this.element.trigger(events.unfrozen);
             this.moveIt();
+        } else {
+            this.element.trigger(events.frozen);
         }
     };
 

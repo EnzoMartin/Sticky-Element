@@ -6,15 +6,17 @@
 		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
 		<script type="text/javascript" src="jquery.stickyelement.js"></script>
 		<style>
-			/* These are not needed */
+			/* These are not needed, only used for the demo */
 			body {width:700px;margin:0 auto;}
 			.container {overflow:hidden;position:relative;}
 			.sidebar {float:left;width:200px;padding:0 20px;}
 			.content {float:left;width:400px;padding:0 20px;border-right:1px solid black;}
+            /* These are not needed, only used for the demo */
 		</style>
 		<script type="text/javascript">
 			$(function(){
-				$('.sidebar').sticky('.container'); // Initialize the sticky scrolling on an item
+                // Initialize the sticky scrolling on an item
+				$('.sidebar').sticky('.container');
 			});
 		</script>
 	</head>
