@@ -3,19 +3,43 @@ Sticking an Element when Scrolling
 
 This is a jQuery plugin to make an element scroll with the page inside the boundaries of a specified container.
 
+There are many plugins like this, this one was built to be simple and lightweight.
+
 ###Usage:
 
 ```javascript
-$('scrolling_item').sticky('scrolling_container');
+$('scrolling_item_selector').sticky('scrolling_container_selector');
 ```
 
 You can pass in a class or ID into either one. Note that the container will get set to position relative.
 
 ###Options:
+| Name  | Default | Description |
+| ------------- | ------------- | ------------- |
+| useTransition | true | Use native CSS3 `transition` property (recommended) |
+| animate | false | Use jQuery animate function |
+| animTime | 300 | Time it takes for animation to complete in `ms` |
+| animDelay | 300 | Delay until the animation starts in `ms`, used only if `animate` is `true` |
 
-* `useFixed`: Default: `true` - Setting this to `false` will instead always use relative positioning
-* `animate`: Default: `false` - Setting this to `true` will animate the scrolling
-* `animTime`: Default: `300` - Animation duration time
+**Note**: If you set `useTransition` to `true`, `animate` will always be treated as `false`
+
+###Methods:
+
+You can call various methods on a sticky element instance
+
+| Name  | Description |
+| ------------- | ------------- |
+| `update` | Updates the position and boundaries of the element |
+| `toggleFreeze` | Locks the element where it is until unfrozen |
+| `setBoundaries` | Updates the top and bottom boundaries of the element |
+| `moveIt` | Manually move the element to the scroll position within its parent boundaries | 
+
+####Example usage:
+
+```javascript
+// This will freeze/unfreeze the sticky element
+$('#sticky').sticky('toggleFreeze');
+```
 
 ## License
 

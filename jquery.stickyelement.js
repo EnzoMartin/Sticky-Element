@@ -1,12 +1,19 @@
-;(function($, window, undefined) {
-
-    "use strict";
+;(function($, win) {
+    'use strict';
+    
+    var requestFrame = (function(){
+        var raf = win.requestAnimationFrame ||
+            win.mozRequestAnimationFrame ||
+            win.webkitRequestAnimationFrame ||
+            function(fn){ return win.setTimeout(fn, 20); };
+        return function(fn){ return raf(fn); };
+    })();
 
     /**
      * Sticky Element constructor
-     * @param elm
-     * @param par
-     * @param options
+     * @param elm {String}
+     * @param par {String}
+     * @param [options] {Object}
      * @constructor
      */
     var Sticky = function(elm, par, options) {
@@ -14,39 +21,53 @@
         this.parent = par;
         this._frozen = false;
         this.options = $.extend({
-            animate: false,
-            useFixed: true,
-            animTime: 300
+            useTransition: false,
+            animate: true,
+            animTime: 200,
+            animDelay: 300
         }, options);
+
         this.init();
     };
 
     Sticky.prototype.init = function() {
-        this.element.addClass("sticky-scroll");
+        var transition = '';
+        if(this.options.useTransition){
+            transition = 'top ' + this.options.animTime + 'ms ease-in-out';
+            this.options.animate = false;
+        }
+
+        this.parent.css({'position':'relative'});
+        this.element
+            .addClass('sticky-scroll')
+            .css({
+                'transition': transition,
+                'position':'relative'
+            });
+
         this.update();
     };
 
+    /**
+     * This will handle any resizing of the container the sticky scroll is in and update the boundaries if necessary
+     */
     Sticky.prototype.update = function() {
-        //This will handle any resizing of the container the sticky scroll is in and update the boundaries if necessary
-        this.setBoundaries();
+        this.setBoundaries(0);
         this.moveIt();
     };
 
+    /**
+     * This will decide whether to move the stickied item
+     */
     Sticky.prototype.moveIt = function() {
-        // This will decide whether to move the stickied item
-        var scrollTop = $(window).scrollTop();
+        var scrollTop = win.document.body.scrollTop;
         var height = this.element.outerHeight(true);
         var realStop = this._stop - height;
 
         if (this._parentHeight - this._offset > height && !this._frozen) {
             if (scrollTop >= this._start && scrollTop <= realStop) {
-                if(this.options.useFixed){
-                    this.element.css({'position':'fixed','top':0,'left':this.element.offset().left});
-                } else {
-                    this.updateOffset(scrollTop - this._start);
-                }
+                this.updateOffset(scrollTop - this._start);
             } else {
-                this.element.css({'position':'relative','left':0});
                 if (scrollTop < this._start) {
                     this.updateOffset(0);
                 } else if (scrollTop > realStop) {
@@ -56,90 +77,129 @@
         }
     };
 
-    Sticky.prototype.setBoundaries = function() {
-        // This will set the boundaries the stickied item can move between and it's left position
-        this._offset = this.element.position().top;
+    /**
+     * This will set the boundaries the stickied item can move between and it's left position
+     * @param [offset] {Number} Manually set the element offset
+     */
+    Sticky.prototype.setBoundaries = function(offset) {
+        this._offset = typeof offset === 'undefined' ? this.element.position().top : offset;
         this._start = this.parent.offset().top + this._offset;
-        this._parentHeight = this.parent.outerHeight();
+        this._parentHeight = this.parent[0].offsetHeight;
         this._stop = this._start + this._parentHeight - this._offset;
     };
 
     /**
-     * Update Stickied Element's offset
-     * @param yOffset
+     * Update Stickied Element's offset thereby moving it up/down the page
+     * @param yOffset {Number}
      */
     Sticky.prototype.updateOffset = function(yOffset) {
-        if (!this._lastPosition !== yOffset) {
-            // This moves the item
-            if (this.animate) {
-                this.element.stop().animate({
+        if (this._lastPosition !== yOffset) {
+            if (this.options.animate) {
+                this.element.stop(true, false).delay(this.options.animDelay).animate({
                     'top': yOffset
                 }, this.animTime);
             } else {
                 this.element.css('top', yOffset);
             }
+
             this._lastPosition = yOffset;
         }
     };
 
+    /**
+     * This will freeze/unfreeze the stickied item
+     */
     Sticky.prototype.toggleFreeze = function() {
-        // This will freeze the stickied item in place wherever it is
         this._frozen = !this._frozen;
+        this.element.stop(true, false);
+        if(!this._frozen){
+            this.moveIt();
+        }
     };
 
-    $.fn.sticky = function(par, options) {
-        var method, args, ret = false;
-        if (typeof options === "string") {
+    $.fn.sticky = function(parentName, options) {
+        var method = parentName;
+        var ret = false;
+        var args = [];
+
+        if (typeof options === 'string') {
             args = [].slice.call(arguments, 0);
         }
 
         this.each(function() {
             var self = $(this);
-            var parent = par;
-            if (parent) {
-                parent = self.parent().closest(parent);
-            } else {
-                parent = self.parent();
-            }
-            parent.css({'position':'relative'}); // Set parent position to relative
-            self.css({'position':'relative'}); // Set item position to relative
-            var instance = self.data("stickyInstance");
+            var instance = self.data('stickyInstance');
 
-            if (instance && options) {
-                if (typeof options === "object") {
+            if (instance && (options || method)) {
+                if (typeof options === 'object') {
                     ret = $.extend(instance.options, options);
-                } else if (options === "options") {
+                } else if (options === 'options') {
                     ret = instance.options;
-                } else if (typeof instance[options] === "function") {
-                    ret = instance[options].apply(instance, args.slice(1));
+                } else if (typeof instance[method] === 'function') {
+                    ret = instance[method].apply(instance, args.slice(1));
                 } else {
-                    throw new Error("Sticky Element has no option/method named " + method);
+                    console.error('Sticky Element has no option/method named ' + method);
                 }
             } else {
+                var parent = null;
+                if (parent) {
+                    parent = self.parent().closest(parent);
+                } else {
+                    parent = self.parent();
+                }
+
                 instance = new Sticky(self, parent, options || {});
-                self.data("stickyInstance", instance);
+                self.data('stickyInstance', instance);
                 $.fn.sticky._instances.push(instance);
             }
         });
         return ret || this;
     };
 
-    $.fn.sticky._instances = [];
+    /**
+     * Update the position/offset changed on resize and move, applies to all instances
+     */
+    var updateAll = function(){
+        var len = $.fn.sticky._instances.length;
+        for(var i = 0; i < len; i++){
+            $.fn.sticky._instances[i].update();
+        }
+    };
 
-    $(window).on({
-        'resize': function(e) {
-            // Update the position/offset changed on resize and move
-            $.each($.fn.sticky._instances, function() {
-                this.update();
-            });
+    $.fn.sticky._instances = [];
+    $.fn.sticky.updateAll = updateAll;
+
+    $(win).on({
+        'resize': function() {
+            // Update the boundaries is the browser window is resized
+            updateAll();
         },
         'scroll': function() {
-            // Move all those suckers on scroll
-            $.each($.fn.sticky._instances, function() {
-                if (!this._frozen) {
-                    this.moveIt();
+            // Move each unfrozen instance on scroll
+            var len = $.fn.sticky._instances.length;
+            for(var i = 0; i < len; i++){
+                var element = $.fn.sticky._instances[i];
+                if (!element._frozen) {
+                    element.moveIt();
                 }
-            });
+            }
         }
     });
+
+    $(win.document).on({
+        'ready': function(){
+            // Start an interval to check the heights of sticky elements and update boundaries if necessary
+            win.setInterval(function(){
+                requestFrame(function(){
+                    var len = $.fn.sticky._instances.length;
+                    for(var i = 0; i < len; i++){
+                        var element = $.fn.sticky._instances[i];
+                        if(element._parentHeight !== element.parent[0].offsetHeight){
+                            element.update();
+                        }
+                    }
+                });
+            },1000);
+        }
+    })
 }(jQuery, window));
