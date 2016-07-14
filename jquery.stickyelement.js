@@ -77,7 +77,7 @@
      * This will decide whether to move the stickied item
      */
     Sticky.prototype.moveIt = function(){
-        var scrollTop = win.document.body.scrollTop;
+        var scrollTop = win.document.documentElement.scrollTop || win.document.body.scrollTop;
         var height = this.element.outerHeight(true);
         var realStop = this._stop - height;
 
