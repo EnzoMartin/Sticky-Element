@@ -12,11 +12,19 @@ There are many plugins like this, but this one was built to be simple and lightw
 - Invoke Sticky Element on the desired DOM element(s)
 
 ```html
-<script type="text/javascript" src="jquery.min.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-latest.min.js"></script>
 <script type="text/javascript" src="jquery.stickyelement.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function(){
+        // Without options
         $('scrolling_item_selector').sticky('scrolling_container_selector');
+        
+        // With options
+        $('scrolling_item_selector').sticky('scrolling_container_selector', {
+            useTransition: false,
+            animate: true,
+            animTime: 1000
+        });
     });
 </script>
 ```
@@ -30,6 +38,7 @@ You can pass in a class or ID into either one. Note that the container will get 
 | animate | true | Use jQuery animate function |
 | animTime | 200 | Time it takes for animation to complete in `ms` |
 | animDelay | 300 | Delay until the animation starts in `ms`, used only if `animate` is `true` |
+| offset | 0 | Offset the sticky element, useful if you have a fixed header that scrolls with the page |
 
 **Note**: If you set `useTransition` to `true`, `animate` will always be treated as `false`
 
@@ -43,12 +52,13 @@ You can call various methods on a sticky element instance
 | `toggleFreeze` | Toggles whether the element will move based off the scroll position |
 | `setBoundaries` | Updates the top and bottom boundaries of the element |
 | `moveIt` | Manually move the element to the scroll position within its parent boundaries (useful if the element is frozen) | 
+| `setOffset` | Update the offset of the sticky element | 
 
 ####Example usage:
 
 ```javascript
-// This will freeze/unfreeze the sticky element
-$('#sticky').sticky('toggleFreeze');
+// This will update the sticky element's offset
+$('#sticky').sticky('setOffset', 50);
 ```
 
 ###Events

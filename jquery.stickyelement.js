@@ -42,6 +42,9 @@
             animDelay:300
         },options);
 
+        var offset = parseInt(options.offset, 10);
+        this.options.offset = isNaN(offset) ? 0 : offset;
+
         this.init();
     };
 
@@ -77,7 +80,7 @@
      * This will decide whether to move the stickied item
      */
     Sticky.prototype.moveIt = function(){
-        var scrollTop = win.document.documentElement.scrollTop || win.document.body.scrollTop;
+        var scrollTop = (win.document.documentElement.scrollTop || win.document.body.scrollTop) + this.options.offset;
         var height = this.element.outerHeight(true);
         var realStop = this._stop - height;
 
@@ -119,6 +122,18 @@
     };
 
     /**
+     * Update the Y offset to calculate against
+     * @param newOffset {Number}
+     */
+    Sticky.prototype.setOffset = function(newOffset){
+        newOffset = parseInt(newOffset, 10);
+        if(!isNaN(newOffset)){
+            this.options.offset = newOffset;
+            this.moveIt();
+        }
+    };
+
+    /**
      * Update Stickied Element's offset thereby moving it up/down the page
      * @param yOffset {Number}
      */
@@ -153,11 +168,6 @@
     $.fn.sticky = function(parentName,options){
         var method = parentName;
         var ret = false;
-        var args = [];
-
-        if(typeof options === 'string'){
-            args = [].slice.call(arguments,0);
-        }
 
         this.each(function(){
             var self = $(this);
@@ -169,7 +179,7 @@
                 } else if(options === 'options'){
                     ret = instance.options;
                 } else if(typeof instance[method] === 'function'){
-                    ret = instance[method].apply(instance,args.slice(1));
+                    ret = instance[method].call(instance,options);
                 } else {
                     console.error('Sticky Element has no option/method named ' + method);
                 }
