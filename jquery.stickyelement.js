@@ -218,16 +218,14 @@
             updateAll();
         },
         'scroll':function(){
-            requestFrame(function(){
-                // Move each unfrozen instance on scroll
-                var len = $.fn.sticky._instances.length;
-                for(var i = 0; i < len; i++){
-                    var element = $.fn.sticky._instances[i];
-                    if(!element._frozen){
-                        element.moveIt();
-                    }
+            // Move each unfrozen instance on scroll
+            var len = $.fn.sticky._instances.length;
+            for(var i = 0; i < len; i++){
+                var element = $.fn.sticky._instances[i];
+                if(!element._frozen){
+                    element.moveIt();
                 }
-            });
+            }
         }
     });
 
