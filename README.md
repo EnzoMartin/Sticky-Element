@@ -5,7 +5,7 @@ This is a jQuery plugin to make an element scroll with the page inside the bound
 
 There are many plugins like this, but this one was built to be simple and lightweight, with no frills nor extra features.
 
-###Usage:
+## Usage
 
 - Download from [GitHub][download], or `npm install jquery-sticky-element` if you're using [NPM][npm]
 - Include jQuery & Sticky Element
@@ -31,7 +31,8 @@ There are many plugins like this, but this one was built to be simple and lightw
 
 You can pass in a class or ID into either one. Note that the container will get set to position relative.
 
-###Options:
+## Options
+
 | Name  | Default | Description |
 | ------------- | ------------- | ------------- |
 | useTransition | true | Use native CSS3 `transition` property (recommended) |
@@ -42,7 +43,7 @@ You can pass in a class or ID into either one. Note that the container will get 
 
 **Note**: If you set `useTransition` to `true`, `animate` will always be treated as `false`
 
-###Methods:
+## Methods
 
 You can call various methods on a sticky element instance
 
@@ -54,14 +55,15 @@ You can call various methods on a sticky element instance
 | `moveIt` | Manually move the element to the scroll position within its parent boundaries (useful if the element is frozen) | 
 | `setOffset` | Update the offset of the sticky element | 
 
-####Example usage:
+### Example usage:
 
 ```javascript
 // This will update the sticky element's offset
 $('#sticky').sticky('setOffset', 50);
 ```
 
-###Events
+## Events
+
 | Name  | Description |
 | ------------- | ------------- |
 | `sticky-created` | Fired when the sticky element is created and ready to move |
