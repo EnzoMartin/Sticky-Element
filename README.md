@@ -1,6 +1,8 @@
 Sticking an Element when Scrolling
 =======================
 
+**IMPORTANT**: It's recommended to use the new CSS `position: sticky` property: https://developers.google.com/web/updates/2012/08/Stick-your-landings-position-sticky-lands-in-WebKit 
+
 This is a jQuery plugin to make an element scroll with the page inside the boundaries of a specified container.
 
 There are many plugins like this, but this one was built to be simple and lightweight, with no frills nor extra features.
