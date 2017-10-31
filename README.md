@@ -73,6 +73,13 @@ $('#sticky').sticky('setOffset', 50);
 | `sticky-frozen` | Fired when the element is frozen |
 | `sticky-unfrozen` | Fired when the element is unfrozen |
 
+### Example usage:
+```javascript
+$('#sticky').on('sticky-created', function(event){
+  console.log('Sticky element created', event.target);
+});
+```
+
 ## License
 
 Copyright (c) 2010-2016

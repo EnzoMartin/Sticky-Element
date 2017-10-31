@@ -1,0 +1,20 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/sticky-element
+    docker:
+      - image: node:8.6
+    steps:
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run:
+          name: install-npm
+          command: npm install
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
+      - run:
+          name: lint
+          command: npm run lint

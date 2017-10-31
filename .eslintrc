@@ -1,0 +1,7 @@
+{
+  "extends": "./node_modules/enzo-codestyle/.eslintrc",
+  "globals": {
+    "window": true,
+    "jQuery": true
+  }
+}
